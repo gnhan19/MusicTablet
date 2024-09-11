@@ -9,7 +9,9 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -32,28 +34,25 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "nhangb";
     private ActivityMainBinding binding;
     private SongViewModel viewModel;
 
+    private MediaManager mediaManager;
     private final IntentFilter intentFilter = new IntentFilter();
     private UpdatePlayNewSong receiver;
 
-    private MusicService musicService;
-    private Intent playIntent;
-    private boolean musicBound = false;
-
-    private List<Song> songList;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     private final ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
-        public void onServiceConnected(ComponentName componentName, IBinder service) {
-            MusicService.MyBinder binder = (MusicService.MyBinder) service;
-            musicService = binder.getService();
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            Log.d(TAG, "onServiceConnected: ");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            musicBound = false;
+            Log.d(TAG, "onServiceDisconnected:");
         }
     };
 
@@ -64,11 +63,17 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         viewModel = new ViewModelProvider(this).get(SongViewModel.class);
-        if (playIntent == null) {
-            playIntent = new Intent(this, MusicService.class);
-            startService(playIntent);
-        }
         grantedPermission();
+        mediaManager = MediaManager.getInstance(this);
+
+        intentFilter.addAction(Const.ACTION_SEND_DATA);
+        receiver = new UpdatePlayNewSong(viewModel);
+        registerReceiver(receiver, intentFilter, Context.RECEIVER_NOT_EXPORTED);
+
+        Intent intent = new Intent(this, MusicService.class);
+        startService(intent);
+        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+        runOnUiThread(runnable);
     }
 
     private void grantedPermission() {
@@ -77,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             List<Song> songs = Utils.getListSongOffline(this);
             viewModel.setListSongs(songs);
             viewModel.selectSong(songs.get(0));
-            setHomeFragment();
+            iniViews();
         } else {
             requestPermissions(new String[]{
                     Manifest.permission.READ_EXTERNAL_STORAGE
@@ -88,21 +93,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        bindService(playIntent, serviceConnection, BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        iniViews();
     }
 
     private void iniViews() {
         viewModel.getListSongs().observe(this, songs -> {
-            songList = songs;
+            mediaManager.setListSongs(songs);
         });
         viewModel.getSelectedSong().observe(this, song -> {
-            musicService.setIndex(songList.indexOf(song));
+            mediaManager.setCurrentIndex(mediaManager.getListSongs().indexOf(song));
             binding.setSong(song);
         });
 
@@ -111,20 +109,32 @@ public class MainActivity extends AppCompatActivity {
         });
 
         binding.btnPlayAndPause.setOnClickListener(view -> {
-            Intent intent = new Intent(Const.ACTION_PAUSE_SONG);
-            sendBroadcast(intent);
-            musicService.playMusic();
+            Intent it = new Intent(Const.ACTION_PAUSE_SONG);
+            sendBroadcast(it);
         });
 
         binding.btnNext.setOnClickListener(view -> {
-            musicService.nextSong();
+            Intent intent = new Intent(Const.ACTION_NEXT);
+            sendBroadcast(intent);
         });
 
         binding.btnPrevious.setOnClickListener(view -> {
-            musicService.backSong();
+            Intent intent = new Intent(Const.ACTION_PREVIOUS);
+            sendBroadcast(intent);
         });
 
+        setHomeFragment();
+
     }
+
+    private final Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            boolean isPlaying = mediaManager.getPlayer().isPlaying();
+            binding.btnPlayAndPause.setImageResource(isPlaying ? R.drawable.pause : R.drawable.play);
+            handler.postDelayed(this, 200);
+        }
+    };
 
     private void setHomeFragment() {
         getSupportFragmentManager().beginTransaction()
@@ -135,8 +145,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        stopService(playIntent);
-        musicService = null;
+        try {
+            unbindService(serviceConnection);
+            unregisterReceiver(receiver);
+        } catch (Exception e) {
+            Log.d("Error", "Error unbind service connect");
+        }
         super.onDestroy();
     }
 }

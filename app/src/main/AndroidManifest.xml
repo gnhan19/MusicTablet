@@ -29,7 +29,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".media.MediaService"/>
+        <service android:name=".service.MusicService"/>
+        <receiver android:name=".broadcast.UpdatePlayNewSong"/>
     </application>
 
 </manifest>
