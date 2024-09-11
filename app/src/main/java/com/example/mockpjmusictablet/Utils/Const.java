@@ -42,7 +42,8 @@ public class Const {
     public static final String ACTION_STOP_ALL = "ACTION_STOP_ALL";
     public static final String ACTION_START_FOREGROUND = "ACTION_START_FOREGROUND";
     public static final int REQUEST_CODE_NOTIFICATION = 999;
-    public static final int NOTIFICATION_ID = 12;
+    public static final int NOTIFICATION_ID = 1234;
+    public static final String CHANNEL_ID = "Mock Project";
     public static final String MEDIA_SHUFFLE = "MEDIA_SHUFFLE";
     public static final String MEDIA_CURRENT_STATE_LOOP = "MEDIA_CURRENT_STATE_LOOP";
 
