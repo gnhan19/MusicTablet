@@ -1,6 +1,7 @@
 package com.example.mockpjmusictablet.service;
 
 import static com.example.mockpjmusictablet.Utils.Const.CHANNEL_ID;
+import static com.example.mockpjmusictablet.Utils.Const.NOTIFICATION_ID;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -83,6 +84,7 @@ public class MusicService extends Service {
     }
 
     private class BroadCastMusic extends BroadcastReceiver {
+        @SuppressLint("ForegroundServiceType")
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(TAG, "onReceive: " + intent.getAction());
@@ -90,6 +92,7 @@ public class MusicService extends Service {
                 case Const.ACTION_SEND_DATA:
                     String title = intent.getStringExtra(Const.KEY_TITLE_SONG);
                     remoteViews.setTextViewText(R.id.tvTitleNoti, title);
+                    startForeground(NOTIFICATION_ID, mBuilder.build());
                     break;
 
                 case Const.ACTION_PREVIOUS:
@@ -102,11 +105,12 @@ public class MusicService extends Service {
 
                 case Const.ACTION_PAUSE_SONG:
                     if (mediaManager.getPlayer().isPlaying()) {
-                        remoteViews.setImageViewResource(R.id.ivPause, R.drawable.pause);
-                    } else {
                         remoteViews.setImageViewResource(R.id.ivPause, R.drawable.play);
+                    } else {
+                        remoteViews.setImageViewResource(R.id.ivPause, R.drawable.pause);
                     }
                     mediaManager.play(false);
+                    startForeground(NOTIFICATION_ID, mBuilder.build());
                     break;
 
                 case Const.ACTION_STOP:
