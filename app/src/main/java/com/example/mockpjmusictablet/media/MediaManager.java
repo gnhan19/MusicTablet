@@ -3,7 +3,7 @@ package com.example.mockpjmusictablet.media;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Bundle;
+import android.util.Log;
 
 import com.example.mockpjmusictablet.Utils.Const;
 import com.example.mockpjmusictablet.data.model.Song;
@@ -65,7 +65,7 @@ public class MediaManager {
     }
 
     public void next() {
-        if (loop != Const.MEDIA_STATE_LOOP_ALL) {
+        if (loop == Const.MEDIA_STATE_NO_LOOP) {
             if (shuffle) {
                 currentIndex = random.nextInt(listSongs.size());
             } else {
@@ -75,12 +75,15 @@ public class MediaManager {
                     currentIndex++;
                 }
             }
+        } else if (loop == Const.MEDIA_STATE_LOOP_ONE) {
+            play(true);
+            setLoop(Const.MEDIA_STATE_NO_LOOP);
         }
         play(true);
     }
 
     public void previous() {
-        if (loop != Const.MEDIA_STATE_LOOP_ONE) {
+        if (loop == Const.MEDIA_STATE_NO_LOOP) {
             if (shuffle) {
                 currentIndex = random.nextInt(listSongs.size());
             } else {
@@ -90,6 +93,9 @@ public class MediaManager {
                     currentIndex--;
                 }
             }
+        } else if (loop == Const.MEDIA_STATE_LOOP_ONE) {
+            play(true);
+            setLoop(Const.MEDIA_STATE_NO_LOOP);
         }
         play(true);
     }
@@ -134,8 +140,11 @@ public class MediaManager {
         loop = value;
     }
 
+    public void seek(int pos){
+        mPlayer.seekTo(pos);
+    }
+
     public MediaPlayer getPlayer() {
         return mPlayer;
     }
-
 }
