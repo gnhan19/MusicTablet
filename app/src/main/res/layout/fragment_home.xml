@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable
             name="Song"
             type="com.example.mockpjmusictablet.data.model.Song" />
@@ -14,47 +12,249 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ivMusic"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/music"
-            app:layout_constraintHeight_percent="0.5"
+        <TextView
+            android:id="@+id/tvSongName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/adamina"
+            android:text="@{Song.title}"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tvPlaylist"
+            android:id="@+id/tvProgress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/playlist"
-            android:textAllCaps="true"
-            android:textColor="@color/textColor"
-            android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivMusic" />
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/progress"
+            android:textColor="@color/blue_light"
+            android:textSize="30sp"
+            app:layout_constraintStart_toEndOf="@id/ivMusicProgress"
+            app:layout_constraintTop_toBottomOf="@id/tvSongName" />
+
+        <ImageView
+            android:id="@+id/ivMusicProgress"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_music"
+            app:layout_constraintBottom_toBottomOf="@id/tvProgress"
+            app:layout_constraintStart_toStartOf="@id/tvSongName"
+            app:layout_constraintTop_toTopOf="@id/tvProgress"
+            app:tint="@color/blue_light" />
+
+        <SeekBar
+            android:id="@+id/sbDuration"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:progressBackgroundTint="@color/white"
+            android:progressTint="@color/blue_light"
+            android:thumb="@drawable/rec"
+            android:thumbOffset="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tvSongName"
+            app:layout_constraintTop_toBottomOf="@id/ivMusicProgress" />
 
         <TextView
-            android:id="@+id/tvNameOfAlbum"
+            android:id="@+id/tvStartTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{Song.album}"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@id/tvPlaylist"
-            app:layout_constraintTop_toBottomOf="@id/tvPlaylist" />
+            android:layout_marginTop="10dp"
+            android:text="@string/_00_00"
+            android:textColor="@color/textColor"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/sbDuration"
+            app:layout_constraintTop_toBottomOf="@id/sbDuration" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvListSong"
+        <TextView
+            android:id="@+id/tvEndTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@{Song.durationConverted}"
+            android:textColor="@color/textColor"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@id/sbDuration"
+            app:layout_constraintTop_toBottomOf="@id/sbDuration" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tbController"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="80dp"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/tvStartTime">
+
+            <ImageView
+                android:id="@+id/btnShuffle"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_shuffle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnPrevious"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+            <ImageView
+                android:id="@+id/btnPrevious"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:src="@drawable/ic_previous"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnPlayAndPause"
+                app:layout_constraintStart_toEndOf="@id/btnShuffle"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+            <ImageView
+                android:id="@+id/btnPlayAndPause"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:src="@drawable/play"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnNext"
+                app:layout_constraintStart_toEndOf="@id/btnPrevious"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btnNext"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:src="@drawable/ic_next"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnRepeat"
+                app:layout_constraintStart_toEndOf="@id/btnPlayAndPause"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btnRepeat"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/ic_repeat"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btnNext"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/lnPlaylist"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="15dp"
+            android:layout_height="54dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@id/tvPlaylist"
-            app:layout_constraintTop_toBottomOf="@id/tvNameOfAlbum"
-            app:layout_constraintWidth_percent="0.9"
-            tools:listitem="@layout/item_song_in_playlist" />
+            app:layout_constraintEnd_toStartOf="@id/lnAlbum"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_percent="0.23">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/playlist" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/playlist"
+                android:textColor="@color/black"
+                android:textSize="28sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnAlbum"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@id/lnHome"
+            app:layout_constraintStart_toEndOf="@id/lnPlaylist"
+            app:layout_constraintTop_toTopOf="@id/lnPlaylist"
+            app:layout_constraintWidth_percent="0.23">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/album" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/album"
+                android:textColor="@color/black"
+                android:textSize="28sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnHome"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toStartOf="@id/lnFolder"
+            app:layout_constraintStart_toEndOf="@id/lnAlbum"
+            app:layout_constraintTop_toTopOf="@id/lnPlaylist"
+            app:layout_constraintWidth_percent="0.23">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/ic_music" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/songs"
+                android:textColor="@color/black"
+                android:textSize="28sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnFolder"
+            android:layout_width="0dp"
+            android:layout_height="54dp"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/lnHome"
+            app:layout_constraintTop_toTopOf="@id/lnPlaylist"
+            app:layout_constraintWidth_percent="0.23">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/folder" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@string/folders"
+                android:textColor="@color/black"
+                android:textSize="28sp" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

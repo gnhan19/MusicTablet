@@ -3,9 +3,8 @@ package com.example.mockpjmusictablet.media;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.util.Log;
 
-import com.example.mockpjmusictablet.Utils.Const;
+import com.example.mockpjmusictablet.utils.Const;
 import com.example.mockpjmusictablet.data.model.Song;
 
 import java.io.IOException;

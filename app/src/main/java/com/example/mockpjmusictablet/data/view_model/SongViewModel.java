@@ -13,6 +13,7 @@ public class SongViewModel extends ViewModel {
     private final MutableLiveData<Song> song = new MutableLiveData<>();
     private final MutableLiveData<String> songName = new MutableLiveData<>();
     private final MutableLiveData<String> path = new MutableLiveData<>();
+    private final MutableLiveData<Integer> positionAlbum = new MutableLiveData<>();
 
     public void selectSong(Song song) {
         this.song.setValue(song);
@@ -44,5 +45,13 @@ public class SongViewModel extends ViewModel {
 
     public LiveData<String> getPath() {
         return path;
+    }
+
+    public void setPositionAlbum(int pos) {
+        this.positionAlbum.setValue(pos);
+    }
+
+    public LiveData<Integer> getPositionAlbum() {
+        return positionAlbum;
     }
 }

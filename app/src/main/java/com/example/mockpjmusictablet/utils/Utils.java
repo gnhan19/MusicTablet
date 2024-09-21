@@ -1,4 +1,4 @@
-package com.example.mockpjmusictablet.Utils;
+package com.example.mockpjmusictablet.utils;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,10 +11,13 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.mockpjmusictablet.R;
+import com.example.mockpjmusictablet.data.model.Album;
 import com.example.mockpjmusictablet.data.model.Song;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Utils {
     private static Context mContext;
@@ -86,5 +89,20 @@ public class Utils {
 
     public static void loadImage(ImageView view, Bitmap url) {
         Glide.with(view.getContext()).load(url).into(view);
+    }
+
+    public static List<Album> getAlbums() {
+        List<Album> albums = new ArrayList<>();
+        List<Song> songs = getListSongOffline(mContext);
+        Map<String, List<Song>> groupedSongs = new HashMap<>();
+        for (Song song : songs) {
+            groupedSongs.computeIfAbsent(song.getAlbum(), k -> new ArrayList<>()).add(song);
+        }
+        for (List<Song> songList : groupedSongs.values()) {
+            if (!songList.isEmpty()) {
+                albums.add(new Album(songList));
+            }
+        }
+        return albums;
     }
 }

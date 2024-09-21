@@ -1,9 +1,6 @@
-package com.example.mockpjmusictablet.ui.home;
+package com.example.mockpjmusictablet.ui.songs;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -16,24 +13,24 @@ import com.example.mockpjmusictablet.databinding.ItemSongInPlaylistBinding;
 
 import java.util.List;
 
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
+public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongHolder> {
     private final List<Song> songs;
     private final Context mContext;
     private int selectedSongPos;
 
-    public HomeAdapter(Context context, List<Song> songs) {
+    public SongAdapter(Context context, List<Song> songs) {
         this.mContext = context;
         this.songs = songs;
     }
 
     @NonNull
     @Override
-    public HomeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new HomeHolder(ItemSongInPlaylistBinding.inflate(LayoutInflater.from(mContext), parent, false));
+    public SongHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new SongHolder(ItemSongInPlaylistBinding.inflate(LayoutInflater.from(mContext), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HomeHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SongHolder holder, int position) {
         Song song = songs.get(position);
         holder.bind(song, position, selectedSongPos);
     }
@@ -43,14 +40,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         return songs.size();
     }
 
-    public void selectSong(int pos) {
-        this.selectedSongPos = pos;
+    public void selectSong(Song song) {
+        this.selectedSongPos = songs.indexOf(song);
     }
 
-    public static class HomeHolder extends RecyclerView.ViewHolder {
+    public static class SongHolder extends RecyclerView.ViewHolder {
         private final ItemSongInPlaylistBinding binding;
 
-        public HomeHolder(ItemSongInPlaylistBinding binding) {
+        public SongHolder(ItemSongInPlaylistBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
@@ -61,10 +58,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             binding.tvDuration.setText(song.getDurationConverted());
             if (pos == selectedSongPos) {
                 binding.holderView.setBackgroundResource(R.color.blue_light);
-                binding.sbDuration.setVisibility(ViewGroup.VISIBLE);
             } else {
                 binding.holderView.setBackgroundResource(R.color.background);
-                binding.sbDuration.setVisibility(ViewGroup.GONE);
             }
         }
     }
