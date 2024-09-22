@@ -56,4 +56,6 @@ public class Const {
 
     public static final String TAG = "NhanGB";
 
+    public static final String ACTION_CHANGE_VOLUME = "android.media.VOLUME_CHANGED_ACTION";
+
 }

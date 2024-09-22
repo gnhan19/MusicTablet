@@ -1,11 +1,13 @@
 package com.example.mockpjmusictablet.ui;
 
+import static com.example.mockpjmusictablet.utils.Const.ACTION_CHANGE_VOLUME;
 import static com.example.mockpjmusictablet.utils.Const.ACTION_SEND_DATA;
 import static com.example.mockpjmusictablet.utils.Const.MEDIA_STATE_LOOP_ONE;
 import static com.example.mockpjmusictablet.utils.Const.MEDIA_STATE_NO_LOOP;
 import static com.example.mockpjmusictablet.utils.Const.TAG;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -44,8 +46,13 @@ public class MainActivity extends AppCompatActivity {
     private SongViewModel viewModel;
 
     private MediaManager mediaManager;
+    private AudioManager audioManager;
+
     private final IntentFilter intentFilter = new IntentFilter();
-    private UpdatePlayNewSong receiver;
+
+    private UpdatePlayNewSong playNewSongReceiver;
+    private VolumeReceiver volumeReceiver;
+
     private boolean isBound = false;
 
     public final ServiceConnection serviceConnection = new ServiceConnection() {
@@ -79,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
         mediaManager = MediaManager.getInstance(this);
 
         intentFilter.addAction(ACTION_SEND_DATA);
-        receiver = new UpdatePlayNewSong(viewModel);
-        registerReceiver(receiver, intentFilter, Context.RECEIVER_NOT_EXPORTED);
+        playNewSongReceiver = new UpdatePlayNewSong(viewModel);
+        registerReceiver(playNewSongReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED);
 
         Intent intent = new Intent(this, MusicService.class);
         startService(intent);
@@ -90,24 +97,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-        binding.sbVolume.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
+        binding.tvSbValue.setText(currentVolume + "");
+        binding.sbVolume.setMax(maxVolume);
+        binding.sbVolume.setProgress(currentVolume);
         binding.sbVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int newVolume, boolean b) {
-                Log.d(TAG, "onProgressChanged: " + newVolume);
                 binding.tvSbValue.setText("" + newVolume);
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0);
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
+
+        volumeReceiver = new VolumeReceiver();
+        registerReceiver(volumeReceiver, new IntentFilter(ACTION_CHANGE_VOLUME));
     }
 
     private void grantedPermission() {
@@ -147,12 +162,24 @@ public class MainActivity extends AppCompatActivity {
         try {
             if (isBound) {
                 unbindService(serviceConnection);
-                unregisterReceiver(receiver);
+                unregisterReceiver(playNewSongReceiver);
+                unregisterReceiver(volumeReceiver);
                 isBound = false;
             }
         } catch (Exception e) {
             Log.d("Error", "Error unbind service connect");
         }
         super.onDestroy();
+    }
+
+    private class VolumeReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null && intent.getAction().equals(ACTION_CHANGE_VOLUME)) {
+                int currentVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+                binding.sbVolume.setProgress(currentVolume);
+                binding.tvSbValue.setText(currentVolume + "");
+            }
+        }
     }
 }
