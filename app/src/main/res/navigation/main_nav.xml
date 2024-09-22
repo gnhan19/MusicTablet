@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/songsFragment">
+
+    <fragment
+        android:id="@+id/albumFragment"
+        android:name="com.example.mockpjmusictablet.ui.album.AlbumFragment"
+        android:label="AlbumFragment" >
+        <action
+            android:id="@+id/action_albumFragment_to_albumListSongFragment2"
+            app:destination="@id/albumListSongFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/albumListSongFragment"
+        android:name="com.example.mockpjmusictablet.ui.album.list_song.AlbumListSongFragment"
+        android:label="AlbumListSongFragment" />
+    <fragment
+        android:id="@+id/songsFragment"
+        android:name="com.example.mockpjmusictablet.ui.songs.SongsFragment"
+        android:label="SongsFragment" >
+        <action
+            android:id="@+id/action_songsFragment_to_albumFragment"
+            app:destination="@id/albumFragment" />
+    </fragment>
+</navigation>

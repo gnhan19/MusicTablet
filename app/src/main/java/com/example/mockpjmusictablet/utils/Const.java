@@ -1,4 +1,4 @@
-package com.example.mockpjmusictablet.Utils;
+package com.example.mockpjmusictablet.utils;
 
 public class Const {
     public static final int MEDIA_IDLE = 101;
@@ -46,5 +46,14 @@ public class Const {
     public static final String CHANNEL_ID = "Mock Project";
     public static final String MEDIA_SHUFFLE = "MEDIA_SHUFFLE";
     public static final String MEDIA_CURRENT_STATE_LOOP = "MEDIA_CURRENT_STATE_LOOP";
+
+    // tag of fragment
+    public static final String ALBUM_FRAGMENT = "ALBUM_FRAGMENT";
+    public static final String HOME_FRAGMENT = "HOME_FRAGMENT";
+    public static final String SONGS_FRAGMENT = "SONGS_FRAGMENT";
+    public static final String PLAYLIST_FRAGMENT = "PLAYLIST_FRAGMENT";
+    public static final String ALBUM_SONGS_FRAGMENT = "ALBUM_SONGS_FRAGMENT";
+
+    public static final String TAG = "NhanGB";
 
 }

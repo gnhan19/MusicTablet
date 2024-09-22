@@ -1,7 +1,7 @@
 package com.example.mockpjmusictablet.service;
 
-import static com.example.mockpjmusictablet.Utils.Const.CHANNEL_ID;
-import static com.example.mockpjmusictablet.Utils.Const.NOTIFICATION_ID;
+import static com.example.mockpjmusictablet.utils.Const.CHANNEL_ID;
+import static com.example.mockpjmusictablet.utils.Const.NOTIFICATION_ID;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
@@ -22,7 +22,7 @@ import android.widget.RemoteViews;
 import androidx.annotation.RequiresApi;
 
 import com.example.mockpjmusictablet.R;
-import com.example.mockpjmusictablet.Utils.Const;
+import com.example.mockpjmusictablet.utils.Const;
 import com.example.mockpjmusictablet.media.MediaManager;
 import com.example.mockpjmusictablet.ui.MainActivity;
 
@@ -87,7 +87,6 @@ public class MusicService extends Service {
         @SuppressLint("ForegroundServiceType")
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(TAG, "onReceive: " + intent.getAction());
             switch (Objects.requireNonNull(intent.getAction())) {
                 case Const.ACTION_SEND_DATA:
                     String title = intent.getStringExtra(Const.KEY_TITLE_SONG);

@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import com.example.mockpjmusictablet.Utils.Const;
+import com.example.mockpjmusictablet.utils.Const;
 import com.example.mockpjmusictablet.data.view_model.SongViewModel;
 
 public class UpdatePlayNewSong extends BroadcastReceiver {
