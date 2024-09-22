@@ -3,6 +3,7 @@ package com.example.mockpjmusictablet.ui;
 import static com.example.mockpjmusictablet.utils.Const.ACTION_SEND_DATA;
 import static com.example.mockpjmusictablet.utils.Const.MEDIA_STATE_LOOP_ONE;
 import static com.example.mockpjmusictablet.utils.Const.MEDIA_STATE_NO_LOOP;
+import static com.example.mockpjmusictablet.utils.Const.TAG;
 
 import android.Manifest;
 import android.content.ComponentName;
@@ -11,10 +12,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.widget.SeekBar;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -83,6 +86,28 @@ public class MainActivity extends AppCompatActivity {
         startService(intent);
         bindService(intent, serviceConnection, BIND_AUTO_CREATE);
         grantedPermission();
+        initViews();
+    }
+
+    private void initViews() {
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+        binding.sbVolume.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+
+        binding.sbVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int newVolume, boolean b) {
+                Log.d(TAG, "onProgressChanged: " + newVolume);
+                binding.tvSbValue.setText("" + newVolume);
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
     }
 
     private void grantedPermission() {

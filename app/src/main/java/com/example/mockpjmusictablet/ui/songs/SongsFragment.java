@@ -41,7 +41,6 @@ public class SongsFragment extends Fragment {
 
     private void initViews() {
         viewModel.getListSongs().observe(requireActivity(), songs -> {
-            Log.d(TAG, "songs size: " + songs.size());
             adapter = new SongAdapter(requireActivity(), songs);
             LinearLayoutManager layoutManager = new LinearLayoutManager(
                     requireContext(),
