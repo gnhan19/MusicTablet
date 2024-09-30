@@ -19,7 +19,7 @@ import com.example.mockpjmusictablet.R;
 import com.example.mockpjmusictablet.data.interfaces.IItemClick;
 import com.example.mockpjmusictablet.data.model.Album;
 import com.example.mockpjmusictablet.data.model.Song;
-import com.example.mockpjmusictablet.data.view_model.SongViewModel;
+import com.example.mockpjmusictablet.view_model.SongViewModel;
 import com.example.mockpjmusictablet.databinding.FragmentAlbumBinding;
 import com.example.mockpjmusictablet.ui.album.list_song.AlbumListSongFragment;
 import com.example.mockpjmusictablet.utils.Utils;

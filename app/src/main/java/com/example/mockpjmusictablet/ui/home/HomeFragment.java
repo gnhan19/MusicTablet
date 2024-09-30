@@ -5,6 +5,7 @@ import static com.example.mockpjmusictablet.utils.Const.ALBUM_FRAGMENT;
 import static com.example.mockpjmusictablet.utils.Const.MEDIA_STATE_LOOP_ALL;
 import static com.example.mockpjmusictablet.utils.Const.MEDIA_STATE_LOOP_ONE;
 import static com.example.mockpjmusictablet.utils.Const.MEDIA_STATE_NO_LOOP;
+import static com.example.mockpjmusictablet.utils.Const.PLAYLIST_FRAGMENT;
 import static com.example.mockpjmusictablet.utils.Const.SONGS_FRAGMENT;
 
 import android.content.Intent;
@@ -27,7 +28,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mockpjmusictablet.R;
 import com.example.mockpjmusictablet.data.model.Song;
-import com.example.mockpjmusictablet.data.view_model.SongViewModel;
+import com.example.mockpjmusictablet.ui.playlist.PlaylistFragment;
+import com.example.mockpjmusictablet.view_model.SongViewModel;
 import com.example.mockpjmusictablet.databinding.FragmentHomeBinding;
 import com.example.mockpjmusictablet.media.MediaManager;
 import com.example.mockpjmusictablet.ui.album.AlbumFragment;
@@ -191,7 +193,7 @@ public class HomeFragment extends Fragment {
     private void setFragment(int page) {
         switch (page) {
             case 1:
-                Toast.makeText(requireActivity(), "This feature is implementing", Toast.LENGTH_SHORT).show();
+                replaceLeftFragment(new PlaylistFragment(), PLAYLIST_FRAGMENT);
                 binding.lnPlaylist.setBackgroundResource(R.color.blue_light);
                 binding.lnAlbum.setBackgroundResource(R.color.white);
                 binding.lnHome.setBackgroundResource(R.color.white);

@@ -4,7 +4,6 @@ import static com.example.mockpjmusictablet.utils.Const.ACTION_CHANGE_VOLUME;
 import static com.example.mockpjmusictablet.utils.Const.ACTION_SEND_DATA;
 import static com.example.mockpjmusictablet.utils.Const.MEDIA_STATE_LOOP_ONE;
 import static com.example.mockpjmusictablet.utils.Const.MEDIA_STATE_NO_LOOP;
-import static com.example.mockpjmusictablet.utils.Const.TAG;
 
 import android.Manifest;
 import android.content.BroadcastReceiver;
@@ -29,7 +28,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.mockpjmusictablet.R;
 import com.example.mockpjmusictablet.broadcast.UpdatePlayNewSong;
 import com.example.mockpjmusictablet.data.model.Song;
-import com.example.mockpjmusictablet.data.view_model.SongViewModel;
+import com.example.mockpjmusictablet.view_model.SongViewModel;
 import com.example.mockpjmusictablet.databinding.ActivityMainBinding;
 import com.example.mockpjmusictablet.media.MediaManager;
 import com.example.mockpjmusictablet.service.MusicService;

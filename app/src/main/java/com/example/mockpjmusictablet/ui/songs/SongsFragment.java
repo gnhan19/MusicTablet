@@ -1,10 +1,7 @@
 package com.example.mockpjmusictablet.ui.songs;
 
-import static com.example.mockpjmusictablet.utils.Const.TAG;
-
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.mockpjmusictablet.data.view_model.SongViewModel;
+import com.example.mockpjmusictablet.view_model.SongViewModel;
 import com.example.mockpjmusictablet.databinding.FragmentSongsBinding;
-import com.example.mockpjmusictablet.media.MediaManager;
 import com.example.mockpjmusictablet.utils.Utils;
 
 public class SongsFragment extends Fragment {
