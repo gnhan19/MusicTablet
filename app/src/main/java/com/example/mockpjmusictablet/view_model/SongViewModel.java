@@ -1,9 +1,10 @@
-package com.example.mockpjmusictablet.data.view_model;
+package com.example.mockpjmusictablet.view_model;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.mockpjmusictablet.data.model.Playlist;
 import com.example.mockpjmusictablet.data.model.Song;
 
 import java.util.List;
@@ -14,6 +15,15 @@ public class SongViewModel extends ViewModel {
     private final MutableLiveData<String> songName = new MutableLiveData<>();
     private final MutableLiveData<String> path = new MutableLiveData<>();
     private final MutableLiveData<Integer> positionAlbum = new MutableLiveData<>();
+    private final MutableLiveData<List<Playlist>> playlists = new MutableLiveData<>();
+
+    public void setPlaylists(List<Playlist> playlists) {
+        this.playlists.setValue(playlists);
+    }
+
+    public LiveData<List<Playlist>> getPlaylists() {
+        return playlists;
+    }
 
     public void selectSong(Song song) {
         this.song.setValue(song);
