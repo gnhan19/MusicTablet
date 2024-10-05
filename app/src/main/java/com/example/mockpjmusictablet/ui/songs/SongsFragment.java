@@ -12,9 +12,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.mockpjmusictablet.view_model.SongViewModel;
 import com.example.mockpjmusictablet.databinding.FragmentSongsBinding;
 import com.example.mockpjmusictablet.utils.Utils;
+import com.example.mockpjmusictablet.view_model.SongViewModel;
 
 public class SongsFragment extends Fragment {
     private FragmentSongsBinding binding;
@@ -46,7 +46,7 @@ public class SongsFragment extends Fragment {
             binding.rvListSong.setAdapter(adapter);
             viewModel.getSelectedSong().observe(requireActivity(), song -> {
                 binding.setSong(song);
-                Utils.loadImage(binding.ivMusic, song.getIcon());
+                Utils.loadImage(binding.ivMusic, Utils.getIconSong(Uri.parse(song.getPath())));
                 adapter.selectSong(song);
                 layoutManager.scrollToPosition(songs.indexOf(song));
                 adapter.notifyDataSetChanged();

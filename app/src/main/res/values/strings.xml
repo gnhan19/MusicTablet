@@ -18,4 +18,6 @@
     <string name="showing">Showing:</string>
     <string name="album_name">Album Name</string>
     <string name="create_new">Create new</string>
+    <string name="playlist_name">playlist name</string>
+    <string name="add">Add</string>
 </resources>

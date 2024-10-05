@@ -12,23 +12,29 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.mockpjmusictablet.R;
 import com.example.mockpjmusictablet.data.interfaces.IItemClick;
+import com.example.mockpjmusictablet.data.interfaces.IItemLongClick;
 import com.example.mockpjmusictablet.data.model.Playlist;
 import com.example.mockpjmusictablet.databinding.FragmentPlaylistBinding;
+import com.example.mockpjmusictablet.ui.playlist.songs.SongsInPlaylistFragment;
+import com.example.mockpjmusictablet.utils.Const;
 import com.example.mockpjmusictablet.utils.PlaylistManager;
 import com.example.mockpjmusictablet.view_model.SongViewModel;
 
 import java.util.List;
 
-public class PlaylistFragment extends Fragment implements IItemClick, PlaylistAdapter.IItemLongClick {
+public class PlaylistFragment extends Fragment implements IItemClick, IItemLongClick {
     private FragmentPlaylistBinding binding;
     private SongViewModel viewModel;
     private PlaylistManager playlistManager;
     private List<Playlist> playlists;
     private PlaylistAdapter adapter;
+    private final int selectedPlaylist = -1;
 
     @Nullable
     @Override
@@ -51,6 +57,9 @@ public class PlaylistFragment extends Fragment implements IItemClick, PlaylistAd
 
         viewModel.getPlaylists().observe(getViewLifecycleOwner(), playlists -> {
             adapter = new PlaylistAdapter(playlists, requireContext(), this, this);
+            if (selectedPlaylist >= 0) {
+                adapter.selectAlbum(playlists.get(selectedPlaylist));
+            }
             LinearLayoutManager layoutManager = new LinearLayoutManager(
                     requireContext(),
                     LinearLayoutManager.VERTICAL,
@@ -96,8 +105,13 @@ public class PlaylistFragment extends Fragment implements IItemClick, PlaylistAd
 
     @Override
     public void onItemClick(int pos) {
-        adapter.selectAlbum(playlists.get(pos));
-        adapter.notifyDataSetChanged();
+        playlists = playlistManager.loadPlaylists();
+        viewModel.setCurrentPlaylist(playlists.get(pos));
+        SongsInPlaylistFragment fragment = new SongsInPlaylistFragment();
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container_view_left, fragment);
+        transaction.addToBackStack(Const.PLAYLIST_SONGS_FRAGMENT);
+        transaction.commit();
     }
 
     @Override

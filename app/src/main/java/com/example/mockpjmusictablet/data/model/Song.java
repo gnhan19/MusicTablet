@@ -3,16 +3,19 @@ package com.example.mockpjmusictablet.data.model;
 import android.graphics.Bitmap;
 
 public class Song {
-    private final String id, title, album, artist, durationConverted, path;
-    private long duration;
+    private final String id;
+    private final String title;
+    private final String album;
+    private final String durationConverted;
+    private final String path;
     private final Bitmap icon;
-    private boolean isSelected;
+    private long duration;
+    private boolean isSelected = false;
 
-    public Song(String id, String title, String album, String artist, String durationConverted, long duration, String path, Bitmap icon) {
+    public Song(String id, String title, String album, String durationConverted, long duration, String path, Bitmap icon) {
         this.id = id;
         this.title = title;
         this.album = album;
-        this.artist = artist;
         this.durationConverted = durationConverted;
         this.duration = duration;
         this.path = path;
@@ -29,10 +32,6 @@ public class Song {
 
     public String getAlbum() {
         return album;
-    }
-
-    public String getArtist() {
-        return artist;
     }
 
     public String getPath() {
@@ -53,10 +52,6 @@ public class Song {
 
     public long getDuration() {
         return duration;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
     }
 
     public String getDurationConverted() {

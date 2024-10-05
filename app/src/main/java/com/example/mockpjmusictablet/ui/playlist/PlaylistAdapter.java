@@ -2,8 +2,8 @@ package com.example.mockpjmusictablet.ui.playlist;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mockpjmusictablet.R;
 import com.example.mockpjmusictablet.data.interfaces.IItemClick;
+import com.example.mockpjmusictablet.data.interfaces.IItemLongClick;
 import com.example.mockpjmusictablet.data.model.Playlist;
 import com.example.mockpjmusictablet.databinding.ItemPlaylistBinding;
 import com.example.mockpjmusictablet.utils.Utils;
@@ -70,7 +71,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         public void bind(Playlist playlist, int position, int selectedPlaylistPos) {
             binding.tvNo.setText(position + 1 + "");
             if (playlist.getNumberOfSongs() > 0) {
-                Utils.loadImage(binding.ivAlbum, playlist.getSongs().get(0).getIcon());
+                Utils.loadImage(binding.ivAlbum, Utils.getIconSong(Uri.parse(playlist.getSongs().get(0).getPath())));
             }
             binding.tvSongName.setText(playlist.getName());
             binding.tvNumberOfSong.setText(playlist.getNumberOfSongs() + " songs");
@@ -80,9 +81,5 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                 binding.holderView.setBackgroundResource(R.color.background);
             }
         }
-    }
-
-    public interface IItemLongClick {
-        void onItemLongClick(int pos);
     }
 }

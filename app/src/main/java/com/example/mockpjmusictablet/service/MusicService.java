@@ -16,38 +16,32 @@ import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.annotation.RequiresApi;
 
 import com.example.mockpjmusictablet.R;
-import com.example.mockpjmusictablet.utils.Const;
 import com.example.mockpjmusictablet.media.MediaManager;
-import com.example.mockpjmusictablet.ui.MainActivity;
+import com.example.mockpjmusictablet.activity.MainActivity;
+import com.example.mockpjmusictablet.utils.Const;
 
 import java.util.Objects;
 
 public class MusicService extends Service {
 
     private static final String TAG = "nhangb";
-    private MediaManager mediaManager;
     private final BroadCastMusic broadCastMusic = new BroadCastMusic();
     private final IntentFilter intentFilter = new IntentFilter();
+    private final MyBinder myBinder = new MyBinder();
+    private MediaManager mediaManager;
     private RemoteViews remoteViews;
     private Notification.Builder mBuilder;
-
     private Context context;
-
-    private final MyBinder myBinder = new MyBinder();
 
     @Override
     public IBinder onBind(Intent intent) {
         runForeground();
         return myBinder;
-    }
-
-    public static class MyBinder extends Binder {
     }
 
     @Override
@@ -80,46 +74,6 @@ public class MusicService extends Service {
             channel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
-        }
-    }
-
-    private class BroadCastMusic extends BroadcastReceiver {
-        @SuppressLint("ForegroundServiceType")
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            switch (Objects.requireNonNull(intent.getAction())) {
-                case Const.ACTION_SEND_DATA:
-                    String title = intent.getStringExtra(Const.KEY_TITLE_SONG);
-                    remoteViews.setTextViewText(R.id.tvTitleNoti, title);
-                    startForeground(NOTIFICATION_ID, mBuilder.build());
-                    break;
-
-                case Const.ACTION_PREVIOUS:
-                    mediaManager.previous();
-                    break;
-
-                case Const.ACTION_NEXT:
-                    mediaManager.next();
-                    break;
-
-                case Const.ACTION_PAUSE_SONG:
-                    if (mediaManager.getPlayer().isPlaying()) {
-                        remoteViews.setImageViewResource(R.id.ivPause, R.drawable.play);
-                    } else {
-                        remoteViews.setImageViewResource(R.id.ivPause, R.drawable.pause);
-                    }
-                    mediaManager.play(false);
-                    startForeground(NOTIFICATION_ID, mBuilder.build());
-                    break;
-
-                case Const.ACTION_STOP:
-                    mediaManager.stop();
-                    stopSelf();
-                    Intent intentStop = new Intent(Const.ACTION_STOP_ALL);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    sendBroadcast(intentStop);
-                    break;
-            }
         }
     }
 
@@ -166,6 +120,49 @@ public class MusicService extends Service {
         );
         remoteViews.setOnClickPendingIntent(R.id.ivPause, pause);
         startForeground(Const.NOTIFICATION_ID, mBuilder.build());
+    }
+
+    public static class MyBinder extends Binder {
+    }
+
+    private class BroadCastMusic extends BroadcastReceiver {
+        @SuppressLint("ForegroundServiceType")
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            switch (Objects.requireNonNull(intent.getAction())) {
+                case Const.ACTION_SEND_DATA:
+                    String title = intent.getStringExtra(Const.KEY_TITLE_SONG);
+                    remoteViews.setTextViewText(R.id.tvTitleNoti, title);
+                    startForeground(NOTIFICATION_ID, mBuilder.build());
+                    break;
+
+                case Const.ACTION_PREVIOUS:
+                    mediaManager.previous();
+                    break;
+
+                case Const.ACTION_NEXT:
+                    mediaManager.next();
+                    break;
+
+                case Const.ACTION_PAUSE_SONG:
+                    if (mediaManager.getPlayer().isPlaying()) {
+                        remoteViews.setImageViewResource(R.id.ivPause, R.drawable.play);
+                    } else {
+                        remoteViews.setImageViewResource(R.id.ivPause, R.drawable.pause);
+                    }
+                    mediaManager.play(false);
+                    startForeground(NOTIFICATION_ID, mBuilder.build());
+                    break;
+
+                case Const.ACTION_STOP:
+                    mediaManager.stop();
+                    stopSelf();
+                    Intent intentStop = new Intent(Const.ACTION_STOP_ALL);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    sendBroadcast(intentStop);
+                    break;
+            }
+        }
     }
 
 }
