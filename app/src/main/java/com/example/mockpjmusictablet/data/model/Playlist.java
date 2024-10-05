@@ -20,8 +20,8 @@ public class Playlist {
         this.numberOfSongs++;
     }
 
-    public void removeSong(Song song) {
-        this.songs.remove(song);
+    public void removeSong(int pos) {
+        this.songs.remove(pos);
         this.numberOfSongs--;
     }
 

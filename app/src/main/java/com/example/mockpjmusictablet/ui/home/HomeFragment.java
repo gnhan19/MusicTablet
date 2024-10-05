@@ -78,12 +78,12 @@ public class HomeFragment extends Fragment {
 
         binding.btnNext.setOnClickListener(view -> {
             mediaManager.next();
-            Log.d(TAG, "current index = " + mediaManager.getCurrentIndex());
             viewModel.selectSong(mediaManager.getListSongs().get(mediaManager.getCurrentIndex()));
         });
 
         binding.btnPrevious.setOnClickListener(view -> {
             mediaManager.previous();
+            viewModel.selectSong(mediaManager.getListSongs().get(mediaManager.getCurrentIndex()));
         });
 
         binding.btnShuffle.setOnClickListener(view -> {

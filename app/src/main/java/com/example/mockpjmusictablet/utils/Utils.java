@@ -51,14 +51,13 @@ public class Utils {
                 while (!c.isAfterLast()) {
                     int id = c.getInt(idIndex);
                     String title = c.getString(titleIndex);
-                    String artist = c.getString(artistIndex);
                     String album = c.getString(albumIndex);
                     String path = c.getString(dataIndex);
                     long duration = c.getLong(durationIndex);
                     String durationConverted = Utils.msToMmSs(duration);
                     if (path.contains("mp3")) {
                         Song songModel = new Song(id + "", title, album,
-                                artist, durationConverted, duration, path,
+                                durationConverted, duration, path,
                                 getIconSong(Uri.parse(path)));
                         songList.add(songModel);
                     }
@@ -88,7 +87,10 @@ public class Utils {
     }
 
     public static void loadImage(ImageView view, Bitmap url) {
-        Glide.with(view.getContext()).load(url).into(view);
+        Glide.with(view.getContext())
+                .load(url)
+                .error(R.drawable.stmtp)
+                .into(view);
     }
 
     public static List<Album> getAlbums() {

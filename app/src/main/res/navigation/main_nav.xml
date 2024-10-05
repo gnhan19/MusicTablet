@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/albumFragment"
         android:name="com.example.mockpjmusictablet.ui.album.AlbumFragment"
-        android:label="AlbumFragment" >
+        android:label="AlbumFragment">
         <action
             android:id="@+id/action_albumFragment_to_albumListSongFragment2"
             app:destination="@id/albumListSongFragment" />
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/songsFragment"
         android:name="com.example.mockpjmusictablet.ui.songs.SongsFragment"
-        android:label="SongsFragment" >
+        android:label="SongsFragment">
         <action
             android:id="@+id/action_songsFragment_to_albumFragment"
             app:destination="@id/albumFragment" />

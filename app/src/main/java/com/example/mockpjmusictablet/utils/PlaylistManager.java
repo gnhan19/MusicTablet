@@ -36,7 +36,8 @@ public class PlaylistManager {
         if (json == null) {
             return new ArrayList<>();
         } else {
-            Type type = new TypeToken<List<Playlist>>() {}.getType();
+            Type type = new TypeToken<List<Playlist>>() {
+            }.getType();
             return gson.fromJson(json, type);
         }
     }
@@ -44,12 +45,6 @@ public class PlaylistManager {
     public void addPlaylist(Playlist playlist) {
         List<Playlist> playlists = loadPlaylists();
         playlists.add(playlist);
-        savePlaylists(playlists);
-    }
-
-    public void removePlaylist(Playlist playlist) {
-        List<Playlist> playlists = loadPlaylists();
-        playlists.remove(playlist);
         savePlaylists(playlists);
     }
 
@@ -70,14 +65,24 @@ public class PlaylistManager {
         savePlaylists(playlists);
     }
 
-    public void removeSongFromPlaylist(String playlistName, Song song) {
+    public void removeSongFromPlaylist(String playlistName, int pos) {
         List<Playlist> playlists = loadPlaylists();
         for (Playlist playlist : playlists) {
             if (playlist.getName().equals(playlistName)) {
-                playlist.removeSong(song);
+                playlist.removeSong(pos);
                 break;
             }
         }
         savePlaylists(playlists);
+    }
+
+    public Playlist findPlaylistByName(String name) {
+        List<Playlist> playlists = loadPlaylists();
+        for (Playlist playlist : playlists) {
+            if (playlist.getName().equals(name)) {
+                return playlist;
+            }
+        }
+        return null;
     }
 }

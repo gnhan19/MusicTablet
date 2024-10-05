@@ -1,6 +1,7 @@
 package com.example.mockpjmusictablet.ui.album;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -60,8 +61,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumHolder>
         }
 
         public void bind(Album album, int position, int selectedAlbumPos) {
-            binding.tvNo.setText(position + 1 +"");
-            Utils.loadImage(binding.ivAlbum, album.getIcon());
+            binding.tvNo.setText(position + 1 + "");
+            Utils.loadImage(binding.ivAlbum, Utils.getIconSong(Uri.parse(album.getSongs().get(0).getPath())));
             binding.tvSongName.setText(album.getName());
             binding.tvNumberOfSong.setText(album.getQuantity() + " songs");
             if (position == selectedAlbumPos) {

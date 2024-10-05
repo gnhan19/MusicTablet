@@ -1,4 +1,4 @@
-package com.example.mockpjmusictablet.ui.album.list_song;
+package com.example.mockpjmusictablet.ui.playlist.songs;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,36 +10,43 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mockpjmusictablet.R;
 import com.example.mockpjmusictablet.data.interfaces.IItemClick;
+import com.example.mockpjmusictablet.data.interfaces.IItemLongClick;
 import com.example.mockpjmusictablet.data.model.Song;
 import com.example.mockpjmusictablet.databinding.ItemSongBinding;
 import com.example.mockpjmusictablet.utils.Utils;
 
 import java.util.List;
 
-public class AlbumSongAdapter extends RecyclerView.Adapter<AlbumSongAdapter.AlbumSongHolder> {
+public class PlaylistSongAdapter extends RecyclerView.Adapter<PlaylistSongAdapter.PlaylistSongHolder> {
     private final List<Song> songs;
     private final Context mContext;
-    private int selectedSongPos = -1;
     private final IItemClick callback;
+    private final IItemLongClick callback2;
+    private int selectedSongPos = -1;
 
-    public AlbumSongAdapter(List<Song> songs, Context mContext, IItemClick callback) {
+    public PlaylistSongAdapter(List<Song> songs, Context mContext, IItemClick callback, IItemLongClick callback2) {
         this.songs = songs;
         this.mContext = mContext;
         this.callback = callback;
+        this.callback2 = callback2;
     }
 
     @NonNull
     @Override
-    public AlbumSongAdapter.AlbumSongHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new AlbumSongHolder(ItemSongBinding.inflate(LayoutInflater.from(mContext), parent, false));
+    public PlaylistSongHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new PlaylistSongHolder(ItemSongBinding.inflate(LayoutInflater.from(mContext), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AlbumSongAdapter.AlbumSongHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PlaylistSongHolder holder, int position) {
         Song song = songs.get(position);
         holder.bind(song, position, selectedSongPos);
         holder.itemView.setOnClickListener(v -> {
             callback.onItemClick(position);
+        });
+        holder.itemView.setOnLongClickListener(view -> {
+            callback2.onItemLongClick(position);
+            return true;
         });
     }
 
@@ -52,10 +59,10 @@ public class AlbumSongAdapter extends RecyclerView.Adapter<AlbumSongAdapter.Albu
         return songs.size();
     }
 
-    public static class AlbumSongHolder extends RecyclerView.ViewHolder {
+    public static class PlaylistSongHolder extends RecyclerView.ViewHolder {
         private final ItemSongBinding binding;
 
-        public AlbumSongHolder(@NonNull ItemSongBinding binding) {
+        public PlaylistSongHolder(@NonNull ItemSongBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

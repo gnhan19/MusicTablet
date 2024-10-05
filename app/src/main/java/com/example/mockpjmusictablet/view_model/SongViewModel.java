@@ -16,13 +16,22 @@ public class SongViewModel extends ViewModel {
     private final MutableLiveData<String> path = new MutableLiveData<>();
     private final MutableLiveData<Integer> positionAlbum = new MutableLiveData<>();
     private final MutableLiveData<List<Playlist>> playlists = new MutableLiveData<>();
+    private final MutableLiveData<Playlist> playlist = new MutableLiveData<>();
+
+    public LiveData<List<Playlist>> getPlaylists() {
+        return playlists;
+    }
 
     public void setPlaylists(List<Playlist> playlists) {
         this.playlists.setValue(playlists);
     }
 
-    public LiveData<List<Playlist>> getPlaylists() {
-        return playlists;
+    public LiveData<Playlist> getCurrentPlaylist() {
+        return playlist;
+    }
+
+    public void setCurrentPlaylist(Playlist playlist) {
+        this.playlist.setValue(playlist);
     }
 
     public void selectSong(Song song) {
@@ -33,35 +42,35 @@ public class SongViewModel extends ViewModel {
         return song;
     }
 
-    public void setListSongs(List<Song> songs) {
-        this.songs.setValue(songs);
-    }
-
     public LiveData<List<Song>> getListSongs() {
         return songs;
     }
 
-    public void setSongName(String songName) {
-        this.songName.setValue(songName);
+    public void setListSongs(List<Song> songs) {
+        this.songs.setValue(songs);
     }
 
     public LiveData<String> getSongName() {
         return songName;
     }
 
-    public void setPath(String path) {
-        this.path.setValue(path);
+    public void setSongName(String songName) {
+        this.songName.setValue(songName);
     }
 
     public LiveData<String> getPath() {
         return path;
     }
 
-    public void setPositionAlbum(int pos) {
-        this.positionAlbum.setValue(pos);
+    public void setPath(String path) {
+        this.path.setValue(path);
     }
 
     public LiveData<Integer> getPositionAlbum() {
         return positionAlbum;
+    }
+
+    public void setPositionAlbum(int pos) {
+        this.positionAlbum.setValue(pos);
     }
 }

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 
-import com.example.mockpjmusictablet.utils.Const;
 import com.example.mockpjmusictablet.data.model.Song;
+import com.example.mockpjmusictablet.utils.Const;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -14,16 +14,15 @@ import java.util.List;
 import java.util.Random;
 
 public class MediaManager {
+    private static WeakReference<MediaManager> mediaManagerRef = null;
     private final MediaPlayer mPlayer = new MediaPlayer();
+    private final Random random = new Random();
+    private final Context mContext;
     private List<Song> listSongs = new ArrayList<>();
     private int currentIndex = 0;
     private int mediaState = Const.MEDIA_IDLE;
     private int loop = Const.MEDIA_STATE_NO_LOOP;
-    private final Random random = new Random();
     private boolean shuffle = Const.MEDIA_SHUFFLE_FALSE;
-    private final Context mContext;
-
-    private static WeakReference<MediaManager> mediaManagerRef = null;
 
     private MediaManager(Context context) {
         mContext = context;
@@ -115,12 +114,12 @@ public class MediaManager {
         this.listSongs = listSongs;
     }
 
-    public void setCurrentIndex(int currentIndex) {
-        this.currentIndex = currentIndex;
-    }
-
     public int getCurrentIndex() {
         return currentIndex;
+    }
+
+    public void setCurrentIndex(int currentIndex) {
+        this.currentIndex = currentIndex;
     }
 
     public boolean isShuffle() {
@@ -139,7 +138,7 @@ public class MediaManager {
         loop = value;
     }
 
-    public void seek(int pos){
+    public void seek(int pos) {
         mPlayer.seekTo(pos);
     }
 

@@ -36,7 +36,6 @@
         <TextView
             android:id="@+id/tvSongName"
             android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.65"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:text="@string/em_cua_ngay_hom_qua"

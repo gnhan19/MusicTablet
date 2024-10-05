@@ -53,6 +53,9 @@ public class Const {
     public static final String SONGS_FRAGMENT = "SONGS_FRAGMENT";
     public static final String PLAYLIST_FRAGMENT = "PLAYLIST_FRAGMENT";
     public static final String ALBUM_SONGS_FRAGMENT = "ALBUM_SONGS_FRAGMENT";
+    public static final String PLAYLIST_SONGS_FRAGMENT = "PLAYLIST_SONGS_FRAGMENT";
+    public static final String PLAYLIST_ADD_SONGS_FRAGMENT = "PLAYLIST_ADD_SONGS_FRAGMENT";
+    public static final String PLAYLIST_NAME = "PLAYLIST_NAME";
 
     public static final String TAG = "NhanGB";
 

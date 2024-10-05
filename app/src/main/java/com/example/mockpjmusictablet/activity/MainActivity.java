@@ -1,4 +1,4 @@
-package com.example.mockpjmusictablet.ui;
+package com.example.mockpjmusictablet.activity;
 
 import static com.example.mockpjmusictablet.utils.Const.ACTION_CHANGE_VOLUME;
 import static com.example.mockpjmusictablet.utils.Const.ACTION_SEND_DATA;
@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.mockpjmusictablet.R;
 import com.example.mockpjmusictablet.broadcast.UpdatePlayNewSong;
 import com.example.mockpjmusictablet.data.model.Song;
-import com.example.mockpjmusictablet.view_model.SongViewModel;
 import com.example.mockpjmusictablet.databinding.ActivityMainBinding;
 import com.example.mockpjmusictablet.media.MediaManager;
 import com.example.mockpjmusictablet.service.MusicService;
@@ -36,19 +35,17 @@ import com.example.mockpjmusictablet.ui.home.HomeFragment;
 import com.example.mockpjmusictablet.ui.songs.SongsFragment;
 import com.example.mockpjmusictablet.utils.Const;
 import com.example.mockpjmusictablet.utils.Utils;
+import com.example.mockpjmusictablet.view_model.SongViewModel;
 
 import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
+    private final IntentFilter intentFilter = new IntentFilter();
     private ActivityMainBinding binding;
     private SongViewModel viewModel;
-
     private MediaManager mediaManager;
     private AudioManager audioManager;
-
-    private final IntentFilter intentFilter = new IntentFilter();
-
     private UpdatePlayNewSong playNewSongReceiver;
     private VolumeReceiver volumeReceiver;
 
