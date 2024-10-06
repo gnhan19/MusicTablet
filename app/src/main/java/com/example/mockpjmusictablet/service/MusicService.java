@@ -28,8 +28,6 @@ import com.example.mockpjmusictablet.utils.Const;
 import java.util.Objects;
 
 public class MusicService extends Service {
-
-    private static final String TAG = "nhangb";
     private final BroadCastMusic broadCastMusic = new BroadCastMusic();
     private final IntentFilter intentFilter = new IntentFilter();
     private final MyBinder myBinder = new MyBinder();
@@ -165,6 +163,11 @@ public class MusicService extends Service {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(broadCastMusic);
+    }
 }
 
 

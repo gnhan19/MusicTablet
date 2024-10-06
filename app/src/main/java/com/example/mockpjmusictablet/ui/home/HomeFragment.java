@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +27,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mockpjmusictablet.R;
 import com.example.mockpjmusictablet.data.model.Song;
-import com.example.mockpjmusictablet.ui.playlist.PlaylistFragment;
-import com.example.mockpjmusictablet.view_model.SongViewModel;
 import com.example.mockpjmusictablet.databinding.FragmentHomeBinding;
 import com.example.mockpjmusictablet.media.MediaManager;
 import com.example.mockpjmusictablet.ui.album.AlbumFragment;
+import com.example.mockpjmusictablet.ui.playlist.PlaylistFragment;
 import com.example.mockpjmusictablet.ui.songs.SongsFragment;
 import com.example.mockpjmusictablet.utils.Utils;
+import com.example.mockpjmusictablet.view_model.SongViewModel;
 
 public class HomeFragment extends Fragment {
     private static final String TAG = "nhangb";
@@ -105,83 +104,81 @@ public class HomeFragment extends Fragment {
             }
         });
         checkLeftFragment();
-        updateBtnPlayPause();
-        updateSeekBarProgress();
-        updateBtnShuffleAndLoop();
         clickToPage();
+        updateViews();
     }
 
-    private void updateBtnShuffleAndLoop() {
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                binding.btnShuffle.setColorFilter(ContextCompat.getColor(
-                        requireActivity(),
-                        mediaManager.isShuffle() ? R.color.blue_light : R.color.white));
-                switch (mediaManager.getLoop()) {
-                    case MEDIA_STATE_NO_LOOP:
-                        binding.btnRepeat.setImageResource(R.drawable.ic_repeat);
-                        binding.btnRepeat.setColorFilter(ContextCompat.getColor(
-                                requireActivity(),
-                                R.color.white));
-                        break;
-                    case MEDIA_STATE_LOOP_ONE:
-                        binding.btnRepeat.setImageResource(R.drawable.ic_repeat_one);
-                        binding.btnRepeat.setColorFilter(ContextCompat.getColor(
-                                requireActivity(),
-                                R.color.blue_light));
-                        break;
-                    case MEDIA_STATE_LOOP_ALL:
-                        binding.btnRepeat.setImageResource(R.drawable.ic_repeat);
-                        binding.btnRepeat.setColorFilter(ContextCompat.getColor(
-                                requireActivity(),
-                                R.color.blue_light));
-                        break;
-                }
-                handler.postDelayed(this, 200);
+    private void updateViews() {
+        requireActivity().runOnUiThread(mUpdateBtnShuffleAndLoop);
+        requireActivity().runOnUiThread(mUpdateBtnPlayPause);
+        requireActivity().runOnUiThread(mUpdateSeekBarProgress);
+    }
+
+    private final Runnable mUpdateBtnShuffleAndLoop = new Runnable() {
+        @Override
+        public void run() {
+            binding.btnShuffle.setColorFilter(ContextCompat.getColor(
+                    requireContext(),
+                    mediaManager.isShuffle() ? R.color.blue_light : R.color.white));
+            switch (mediaManager.getLoop()) {
+                case MEDIA_STATE_NO_LOOP:
+                    binding.btnRepeat.setImageResource(R.drawable.ic_repeat);
+                    binding.btnRepeat.setColorFilter(ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white));
+                    break;
+                case MEDIA_STATE_LOOP_ONE:
+                    binding.btnRepeat.setImageResource(R.drawable.ic_repeat_one);
+                    binding.btnRepeat.setColorFilter(ContextCompat.getColor(
+                            requireContext(),
+                            R.color.blue_light));
+                    break;
+                case MEDIA_STATE_LOOP_ALL:
+                    binding.btnRepeat.setImageResource(R.drawable.ic_repeat);
+                    binding.btnRepeat.setColorFilter(ContextCompat.getColor(
+                            requireContext(),
+                            R.color.blue_light));
+                    break;
             }
-        });
-    }
+            handler.postDelayed(this, 200);
+        }
+    };
 
-    private void updateBtnPlayPause() {
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                boolean isPlaying = mediaManager.getPlayer().isPlaying();
-                binding.btnPlayAndPause.setImageResource(isPlaying ? R.drawable.pause : R.drawable.play);
-                handler.postDelayed(this, 200);
+    private final Runnable mUpdateBtnPlayPause = new Runnable() {
+        @Override
+        public void run() {
+            boolean isPlaying = mediaManager.getPlayer().isPlaying();
+            binding.btnPlayAndPause.setImageResource(isPlaying ? R.drawable.pause : R.drawable.play);
+            handler.postDelayed(this, 200);
+        }
+    };
+
+    private final Runnable mUpdateSeekBarProgress = new Runnable() {
+        @Override
+        public void run() {
+            if (mediaManager.getPlayer().isPlaying()) {
+                Song song = mediaManager.getListSongs().get(mediaManager.getCurrentIndex());
+                binding.tvStartTime.setText(Utils.msToMmSs(mediaManager.getPlayer().getCurrentPosition()));
+                binding.sbDuration.setMax((int) song.getDuration());
+                binding.sbDuration.setProgress(mediaManager.getPlayer().getCurrentPosition());
+                binding.sbDuration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        mediaManager.seek(binding.sbDuration.getProgress());
+                    }
+                });
             }
-        });
-    }
-
-    private void updateSeekBarProgress() {
-        requireActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mediaManager.getPlayer().isPlaying()) {
-                    Song song = mediaManager.getListSongs().get(mediaManager.getCurrentIndex());
-                    binding.tvStartTime.setText(Utils.msToMmSs(mediaManager.getPlayer().getCurrentPosition()));
-                    binding.sbDuration.setMax((int) song.getDuration());
-                    binding.sbDuration.setProgress(mediaManager.getPlayer().getCurrentPosition());
-                    binding.sbDuration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                        @Override
-                        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                        }
-
-                        @Override
-                        public void onStartTrackingTouch(SeekBar seekBar) {
-                        }
-
-                        @Override
-                        public void onStopTrackingTouch(SeekBar seekBar) {
-                            mediaManager.seek(binding.sbDuration.getProgress());
-                        }
-                    });
-                }
-                handler.postDelayed(this, 1000);
-            }
-        });
-    }
+            handler.postDelayed(this, 1000);
+        }
+    };
 
     private void clickToPage() {
         binding.lnPlaylist.setOnClickListener(view -> setFragment(1));
@@ -245,4 +242,11 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(mUpdateBtnPlayPause);
+        handler.removeCallbacks(mUpdateSeekBarProgress);
+        handler.removeCallbacks(mUpdateBtnShuffleAndLoop);
+    }
 }
